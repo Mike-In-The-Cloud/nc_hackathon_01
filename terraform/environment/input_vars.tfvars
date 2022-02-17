@@ -1,6 +1,6 @@
-stack_name="hackathon001"
+stack_name    = "hackathon001"
 function_name = "hackathon_lambda"
 handler_name  = "lambda_function"
 runtime       = "python3.9"
 timeout       = "10"
-account_id    = "878915726377"
+account_id    = ""

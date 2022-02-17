@@ -29,34 +29,49 @@ EOF
 resource "aws_iam_role_policy" "lambda_s3_put" {
   name   = "lambda-logs"
   role   = aws_iam_role.iam_for_lambda_tf.name
-  policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "logs:CreateLogGroup",
-            "Resource": "arn:aws:logs:eu-west-2:${var.account_id}:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": [
-                "arn:aws:logs:eu-west-2:${var.account_id}:log-group:/aws/lambda/hackathon_lambda:*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": "arn:aws:s3:::hackathon001-${var.account_id}-backend/*"
-        }
-    ]
-  })
+   policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:CopyObject",
+        "s3:HeadObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::hackathon001-${var.account_id}-backend",
+        "arn:aws:s3:::hackathon001-${var.account_id}-backend/*"
+      ]
+    },
+    {
+      "Action": [
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:CopyObject",
+        "s3:HeadObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::hackathon001-${var.account_id}-backend",
+        "arn:aws:s3:::hackathon001-${var.account_id}-backend/*"
+      ]
+    },
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
 
